@@ -15,7 +15,7 @@ import (
 func main() {
 	tree := trie.InitRoot()
 
-	fi, err := os.Open("/Users/pengfei29/Downloads/poidic.csv")
+	fi, err := os.Open("/Users/user/Downloads/keyword.csv")
 	if err != nil {
 		fmt.Printf("Error: %s\n", err)
 		return
@@ -53,14 +53,15 @@ func main() {
 		data := buf[0:data_len]
 		msg := string(data)
 		matched := trie.Match(tree, msg)
+		response := []byte("[]") // 给响应一个默认值
 		if len(matched) > 0 {
 			json_str, _ := json.Marshal(matched)
-			response := []byte(string(json_str))
-			_, err = client.Write(response)
-			if err != nil {
-				fmt.Printf("Error: %s\n", err)
-				return
-			}
+			response = []byte(string(json_str))
+		}
+		_, err = client.Write(response)
+		if err != nil {
+			fmt.Printf("Error: %s\n", err)
+			return
 		}
 	}
 }
